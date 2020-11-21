@@ -13,7 +13,7 @@ on:
     types: [rpi4, rpi]
   workflow_dispatch:
   schedule:
-    - cron: 0 0 * * *
+    - cron: 0 3 * * *
 #  watch:
 #    types: started
 
@@ -146,18 +146,18 @@ jobs:
           make checksum
           echo "::set-output name=status::success"
 
-      - name: Build & Push Docker Image To Dockerhub
-        run: |
-          cd openwrt/bin/targets/$TARGET/$SUBTARGET/
-          docker import $DEVICE-rootfs.tar.gz ${{ secrets.DOCKER_HUB_USERNAME }}/openwrt:rpi4
-          docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PWD }}
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/openwrt:rpi4
+#      - name: Build & Push Docker Image To Dockerhub
+#        run: |
+#          cd openwrt/bin/targets/$TARGET/$SUBTARGET/
+#          docker import $DEVICE-rootfs.tar.gz ${{ secrets.DOCKER_HUB_USERNAME }}/openwrt:rpi4
+#          docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PWD }}
+#          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/openwrt:rpi4
 
-      - name: Push Docker Image To Aliyun Docker Registry
-        run: |
-          docker login -u ${{ secrets.ALIYUN_USERNAME }} -p ${{ secrets.ALIYUN_PWD }} registry.cn-shanghai.aliyuncs.com
-          docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/openwrt:rpi4 registry.cn-shanghai.aliyuncs.com/${{ secrets.ALIYUN_NAMESPACES }}/openwrt:rpi4
-          docker push registry.cn-shanghai.aliyuncs.com/${{ secrets.ALIYUN_NAMESPACES }}/openwrt:rpi4
+#      - name: Push Docker Image To Aliyun Docker Registry
+#        run: |
+#          docker login -u ${{ secrets.ALIYUN_USERNAME }} -p ${{ secrets.ALIYUN_PWD }} registry.cn-shanghai.aliyuncs.com
+#          docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/openwrt:rpi4 registry.cn-shanghai.aliyuncs.com/${{ secrets.ALIYUN_NAMESPACES }}/openwrt:rpi4
+#          docker push registry.cn-shanghai.aliyuncs.com/${{ secrets.ALIYUN_NAMESPACES }}/openwrt:rpi4
 
       - name: Organize Files
         id: organize
